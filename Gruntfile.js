@@ -48,7 +48,8 @@ module.exports = function(grunt) {
 	config.uglify = {
 		"dist": {
 			"options": {
-				"sourceMap": "source-map.json"
+				"sourceMap": "source-map.json",
+				"sourceMapRoot": "../"
 			},
 			"files": [{
 				"src/toc.min.js": "src/toc.js"
