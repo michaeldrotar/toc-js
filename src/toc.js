@@ -206,7 +206,7 @@
 	function lowestLevel(targets) {
 		var tag, level, lowestLevel,
 			i,l;
-		for ( i = 1, l = targets.length; i < l; i++ ) {
+		for ( i = 0, l = targets.length; i < l; i++ ) {
 			tag = targets[i].tagName.toLowerCase();
 			level = levels[tag];
 			lowestLevel = lowestLevel ? Math.min(level, lowestLevel) : level;
