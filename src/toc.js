@@ -203,15 +203,27 @@
 		}
 	}
 	
-	function create(root, targets, level) {
-		var lastLevel = level || 1,
+	function lowestLevel(targets) {
+		var tag, level, lowestLevel,
+			i,l;
+		for ( i = 1, l = targets.length; i < l; i++ ) {
+			tag = targets[i].tagName.toLowerCase();
+			level = levels[tag];
+			lowestLevel = lowestLevel ? Math.min(level, lowestLevel) : level;
+		}
+		return lowestLevel || 1;
+	}
+	
+	function create(root, targets) {
+		var lastLevel = lowestLevel(targets),
 			lastNotLeveled = false,
 			parent = root,
-			target,
+			target, i, l,
 			tag, child, anchor, text, name, base, num;
 		level = lastLevel;
 		
-		while ( target = targets.shift() ) {
+		for ( i = 0, l = targets.length; i < l; i++ ) {
+			target = targets[i];
 			tag = target.tagName.toLowerCase();
 			text = toc.trim(toc.text(target));
 			
