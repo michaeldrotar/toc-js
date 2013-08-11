@@ -7,7 +7,8 @@ basePath = '';
 files = [
 	JASMINE,
 	JASMINE_ADAPTER,
-	'src/toc.js',
+	'src/toc.min.js',
+	{ 'pattern': 'src/**/*', 'included': false },
 	'spec/lib/jquery/**/*',
 	'spec/lib/jasmine-jquery/**/*',
 	{ 'pattern': 'spec/fixtures/**/*', 'included': false },

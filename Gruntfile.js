@@ -37,19 +37,12 @@ module.exports = function(grunt) {
 	}
 	
 	var config = {};
-	config.clean = ["source-map.json"];
-	config.copy = {
-		"dist": {
-			"files": [
-				{ "src/source-map.json": "source-map.json" }
-			]
-		}
-	};
 	config.uglify = {
 		"dist": {
 			"options": {
-				"sourceMap": "source-map.json",
-				"sourceMapRoot": "../"
+				"sourceMap": "src/toc.js.map",
+				"sourceMapPrefix": 1,
+				"sourceMappingURL": "toc.js.map"
 			},
 			"files": [{
 				"src/toc.min.js": "src/toc.js"
@@ -57,20 +50,13 @@ module.exports = function(grunt) {
 		}
 	};
 	config.watch = {
-		//"copy": watch(config.copy.dist, ["copy", "clean"]),
-		"source-map": {
-			"files": ["*.json"],
-			"tasks": ["copy", "clean"]
-		},
 		"uglify": watch(config.uglify.dist, ["uglify"])
 	};
 	
 	grunt.initConfig(config);
 	
-	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	
-	grunt.registerTask("default", ["uglify", "copy", "clean"]);
+	grunt.registerTask("default", ["uglify"]);
 };
