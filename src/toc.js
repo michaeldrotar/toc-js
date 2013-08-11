@@ -26,7 +26,7 @@
 		for ( i = 1, l = arguments.length; i < l; i++ ) {
 			if ( (arg = arguments[i]) && typeof arg === "object" ) {
 				for ( k in arg ) {
-					if ( target[k] === undefined ) {
+					if ( arg[k] !== undefined ) {
 						target[k] = arg[k];
 					}
 				}
@@ -287,7 +287,7 @@
 			return;
 		}
 		
-		options = toc.extend({}, options, toc.defaults);
+		options = toc.extend({}, toc.defaults, options);
 		
 		var targets = toc.query(options.selector),
 			root = document.createElement("ol");
