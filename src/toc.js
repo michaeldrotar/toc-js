@@ -191,6 +191,21 @@
 		return false;
 	}
 	
+	function createNameFromText(text) {
+		return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^\-|\-$/g, "");
+	}
+	
+	function createUniqueNameFromText(text, target) {
+		var base = createNameFromText(text),
+			num  = 1,
+			name = base;
+		while ( !isNameAvailable(name, target) ) {
+			name = base + num;
+			num++;
+		}
+		return name;
+	}
+	
 	function wrapTarget(target, name) {
 		var parent = target.parentNode,
 			anchor;
@@ -233,13 +248,7 @@
 				}
 				name = target.name;
 			} else {
-				num = 1;
-				base = text.toLowerCase().replace(/[^a-z0-9]/g, "-");
-				name = base;
-				while ( !isNameAvailable(name, target) ) {
-					name = base + num;
-					num++;
-				}
+				name = createUniqueNameFromText(text, target);
 				wrapTarget(target, name);
 			}
 			
