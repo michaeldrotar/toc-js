@@ -147,7 +147,9 @@
 		for ( i = 0, l = targets.length; i < l; i++ ) {
 			tag = targets[i].tagName.toLowerCase();
 			level = levels[tag];
-			lowestLevel = lowestLevel ? Math.min(level, lowestLevel) : level;
+			if ( level ) {
+				lowestLevel = lowestLevel ? Math.min(level, lowestLevel) : level;
+			}
 		}
 		return lowestLevel || 1;
 	}
