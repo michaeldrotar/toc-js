@@ -1,6 +1,5 @@
 (function(window, document, undefined) {
-	var toc,
-		isDomReady, domReadyList, onDomReady, domComplete, detachDomReady, processDomReadyList;
+	var toc;
 	
 	toc = function(method) {
 		if ( typeof method === "string" && typeof toc[method] === "function" ) {
@@ -89,82 +88,6 @@
 	
 	toc.trim = function(str) {
 		return str.replace(/^\s+|\s+$/, "");
-	}
-		
-	if ( window.jQuery ) {
-		onDomReady = jQuery;
-	} else {
-		// Implement dom ready event handling similar to jQuery 1.10.2
-		
-		domComplete = function(e) {
-			if ( document.addEventListener || e.type === "load" || document.readyState === "complete" ) {
-				detachDomReady();
-				processDomReadyList();
-			}
-		}
-		
-		detachDomReady = function() {
-			if ( document.addEventListener ) {
-				document.removeEventListener("DOMContentLoaded", domComplete, false);
-				window.removeEventListener("load", domComplete, false);
-			} else {
-				document.detachEvent("onreadystatechange", domComplete);
-				window.detachEvent("onload", domComplete);
-			}
-		}
-		
-		onDomReady = function(callback) {
-			var top;
-			
-			if ( isDomReady ) {
-				setTimeout(callback, 1);
-				return;
-			}
-			
-			if ( !domReadyList ) {
-				domReadyList = [ callback ];
-				
-				// initial setup
-				if ( document.readyState === "complete" ) {
-					setTimeout(processDomReadyList, 1);
-				} else if ( document.addEventListener ) {
-					document.addEventListener("DOMContentLoaded", domComplete, false);
-					window.addEventListener("load", domComplete, false);
-				} else {
-					document.attachEvent("onreadystatechange", domComplete);
-					window.attachEvent("onload", domComplete);
-					
-					top = false;
-					try {
-						top = window.frameElement == null && document.documentElement;
-					} catch (e) {}
-					
-					if ( top && top.doScroll ) {
-						(function doScrollCheck() {
-							if ( !isDomReady ) {
-								try {
-									top.doScroll("left");
-								} catch (e) {
-									return setTimeout(doScrollCheck, 50);
-								}
-								detachDomReady();
-								processDomReadyList();
-							}
-						})();
-					}
-				}
-			} else {
-				domReadyList.push(callback);
-			}
-		}
-		
-		processDomReadyList = function() {
-			var i, l;
-			isDomReady = true;
-			for ( i = 0, l = domReadyList.length; i < l; i++ ) {
-				domReadyList[i]();
-			}
-		}
 	}
 	
 	var levels = {
@@ -303,13 +226,6 @@
 		root.className = "toc";
 		return create(root, targets);
 	};
-	
-	toc.init = function() {
-		var parent = document.createElement("ol");
-		return parent;
-	};
-	
-	onDomReady(toc.init);
 	
 	window.toc = toc;
 	
