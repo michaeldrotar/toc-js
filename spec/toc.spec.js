@@ -1,4 +1,4 @@
-jasmine.getFixtures().fixturesPath = "/base/spec/fixtures";
+jasmine.getFixtures().fixturesPath = location.protocol === "file:" ? "fixtures" : "/base/spec/fixtures";
 
 describe("toc-js", function() {
 	var result;
@@ -12,15 +12,15 @@ describe("toc-js", function() {
 			result = $(toc());
 		});
 		
-		it("includes all elements", function() {
+		it("and includes all elements", function() {
 			expect(result.find("li")).toHaveLength($(toc.defaults.selector).length+1); // +1 skipped
 		});
 		
-		it("contains sub-lists", function() {
+		it("and contains sub-lists", function() {
 			expect(result.find("ol > li > ol")).toHaveLength(9);
 		});
 		
-		it("assigns class names", function() {
+		it("and assigns class names", function() {
 			expect(result.find(".skipped")).toHaveLength(1);
 			expect(result.find(".h3")).toHaveLength($("h3").length);
 			expect(result.find(".a")).toHaveLength($("a[name]:not(.toc-anchor)").length);

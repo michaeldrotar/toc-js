@@ -37,7 +37,11 @@
           currentWindowOnload();
         }
         execJasmine();
-        $.get("/base/spec/fixtures/toc.fixture.html").done(function(markup) { $("#html-fixtures").append(markup); });
+        $.get(
+          location.protocol === "file:" ?
+            "fixtures/toc.fixture.html" :
+            "/base/spec/fixtures/toc.fixture.html"
+        ).done(function(markup) { $("#html-fixtures").append(markup); });
       };
 
       function execJasmine() {
