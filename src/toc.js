@@ -16,6 +16,7 @@
 	};
 	
 	toc.defaults = {
+		"anchorClassName": "toc-anchor",
 		"selector": "h1,h2,h3,h4,h5,h6,a[name]:not(.toc-anchor)"
 	};
 	
@@ -99,19 +100,8 @@
 		"h6": 6,
 	}
 	
-	function isNameAvailable(name, target) {
-		var users = toc.query("a[name='"+name+"']"),
-			parent = target.parentNode,
-			i, l;
-		if ( !users.length ) {
-			return true;
-		}
-		for ( i = 0, l = users.length; i < l; i++ ) {
-			if ( users[i] === parent ) {
-				return true;
-			}
-		}
-		return false;
+	function isNameAvailable(name) {
+		return toc.query("a[name='"+name+"']").length === 0;
 	}
 	
 	function createNameFromText(text) {
@@ -122,23 +112,18 @@
 		var base = createNameFromText(text),
 			num  = 1,
 			name = base;
-		while ( !isNameAvailable(name, target) ) {
+		while ( !isNameAvailable(name) ) {
 			name = base + num;
 			num++;
 		}
 		return name;
 	}
 	
-	function wrapTarget(target, name) {
-		var parent = target.parentNode,
-			anchor;
-		if ( parent.tagName.toLowerCase() !== "a" || parent.name !== name ) {
-			anchor = document.createElement("a");
-			anchor.name = name;
-			anchor.className = "toc-anchor";
-			parent.insertBefore(anchor, target);
-			anchor.appendChild(target);
-		}
+	function addAnchor(target, name) {
+		var anchor = document.createElement("a");
+		anchor.name = name;
+		target.parentNode.insertBefore(anchor, target);
+		return anchor;
 	}
 	
 	function lowestLevel(targets) {
@@ -154,7 +139,7 @@
 		return lowestLevel || 1;
 	}
 	
-	function create(root, targets) {
+	function create(root, targets, options) {
 		var lastLevel = lowestLevel(targets),
 			lastNotLeveled = false,
 			parent = root,
@@ -168,13 +153,14 @@
 			text = toc.trim(toc.text(target));
 			
 			if ( tag === "a" && target.name ) {
-				if ( /\btoc-anchor\b/.test(target.className) ) {
+				if ( (new RegExp("\\b"+options.anchorClassName+"\\b")).test(target.className) ) {
 					continue;
 				}
 				name = target.name;
 			} else {
 				name = createUniqueNameFromText(text, target);
-				wrapTarget(target, name);
+				anchor = addAnchor(target, name);
+				anchor.className = options.anchorClassName;
 			}
 			
 			level = levels[tag];
@@ -226,7 +212,7 @@
 		var targets = toc.query(options.selector),
 			root = document.createElement("ol");
 		root.className = "toc";
-		return create(root, targets);
+		return create(root, targets, options);
 	};
 	
 	window.toc = toc;
